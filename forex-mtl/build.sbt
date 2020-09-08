@@ -39,6 +39,7 @@ libraryDependencies ++= Seq(
   Libraries.http4sServer,
   Libraries.http4sClient,
   Libraries.http4sCirce,
+  Libraries.redis4cats,
   Libraries.circeCore,
   Libraries.circeGeneric,
   Libraries.circeGenericExt,
@@ -46,7 +47,10 @@ libraryDependencies ++= Seq(
   Libraries.circeJava8,
   Libraries.pureConfig,
   Libraries.logback,
-  Libraries.scalaTest        % Test,
-  Libraries.scalaCheck       % Test,
-  Libraries.catsScalaCheck   % Test
+  Libraries.sealerate,
+  Libraries.scalaTest      % Test,
+  Libraries.scalaCheck     % Test,
+  Libraries.scalaCheckPlus % Test,
+  Libraries.catsScalaCheck % Test,
+  "com.codecommit"         %% "cats-effect-testing-scalatest" % "0.4.1"
 )

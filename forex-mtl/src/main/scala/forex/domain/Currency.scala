@@ -1,5 +1,6 @@
 package forex.domain
 
+import ca.mrvisser.sealerate
 import cats.Show
 
 sealed trait Currency
@@ -14,6 +15,8 @@ object Currency {
   case object JPY extends Currency
   case object SGD extends Currency
   case object USD extends Currency
+
+  def values: Set[Currency] = sealerate.values[Currency]
 
   implicit val show: Show[Currency] = Show.show {
     case AUD => "AUD"
@@ -39,4 +42,5 @@ object Currency {
     case "USD" => USD
   }
 
+  val CURRENCY_CODE_LEN = 3
 }

@@ -1,6 +1,7 @@
 package forex.programs.rates
 
-import forex.services.rates.errors.{ Error => RatesServiceError }
+import forex.services.rates.errors.Error.CacheError
+import forex.services.rates.errors.{Error => RatesServiceError}
 
 object errors {
 
@@ -11,5 +12,6 @@ object errors {
 
   def toProgramError(error: RatesServiceError): Error = error match {
     case RatesServiceError.OneFrameLookupFailed(msg) => Error.RateLookupFailed(msg)
+    case CacheError => Error.RateLookupFailed("Cache error")
   }
 }

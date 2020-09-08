@@ -31,8 +31,9 @@ object Protocol {
    */
   final case class OneFrameResponse(value: Seq[OneFrameDataItem])
 
-  implicit val currencyDecoder: Decoder[Currency] = Decoder[String].map(Currency.fromString).map(_.get) //TODO: unsafe
+  implicit val currencyDecoder: Decoder[Currency] = Decoder[String].emap(c => Currency.fromString(c).toRight(s"Invalid currency $c"))
   implicit val priceDecoder: Decoder[Price]       = Decoder[Double].map(BigDecimal(_)).map(Price.apply)
+
 
   val oneFrameDateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
 

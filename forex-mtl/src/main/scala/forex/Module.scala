@@ -1,6 +1,9 @@
 package forex
 
-import cats.effect.{ Concurrent, ConcurrentEffect, Resource, Timer }
+import cats.Applicative
+import cats.effect.{ConcurrentEffect, ContextShift, Resource, Timer}
+import dev.profunktor.redis4cats.effect.Log
+import dev.profunktor.redis4cats.{Redis, RedisCommands}
 import forex.config.ApplicationConfig
 import forex.http.rates.RatesHttpRoutes
 import forex.services._
@@ -9,17 +12,20 @@ import org.http4s._
 import org.http4s.client.Client
 import org.http4s.client.blaze.BlazeClientBuilder
 import org.http4s.implicits._
-import org.http4s.server.middleware.{ AutoSlash, Timeout }
+import org.http4s.server.middleware.{AutoSlash, Timeout}
 
-class Module[F[_]: Concurrent: Timer: ConcurrentEffect](config: ApplicationConfig) {
+class Module[F[_]: ConcurrentEffect: Timer: Applicative: ContextShift: Log](config: ApplicationConfig) {
 
   //TODO: is it OK using `global` EC here
   val client: Resource[F, Client[F]] =
     BlazeClientBuilder[F](scala.concurrent.ExecutionContext.global).resource
+  val redisClient: Resource[F, RedisCommands[F, String, String]] = Redis[F].utf8(s"redis://${config.redisHost}")
 
-  private val ratesService: RatesService[F] = RatesServices.oneFrameDirect[F](client, config.oneFrame)
+  private val redisCache: RatesCacheService[F]    = RatesCacheServices.redis(redisClient)
+  private val ratesService: RatesService[F]       = RatesServices.oneFrameDirect[F](client, config.oneFrame)
+  private val ratesCachedService: RatesService[F] = RatesServices.cached[F](ratesService, redisCache)
 
-  private val ratesProgram: RatesProgram[F] = RatesProgram[F](ratesService)
+  private val ratesProgram: RatesProgram[F] = RatesProgram[F](ratesCachedService)
 
   private val ratesHttpRoutes: HttpRoutes[F] = new RatesHttpRoutes[F](ratesProgram).routes
 

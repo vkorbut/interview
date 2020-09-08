@@ -15,6 +15,7 @@ object Dependencies {
     val scalaCheck          = "1.14.3"
     val scalaTest           = "3.1.0"
     val catsScalaCheck      = "0.2.0"
+    val redis4Cats          = "0.10.2"
   }
 
   object Libraries {
@@ -36,6 +37,8 @@ object Dependencies {
     lazy val circeJava8          = circe("circe-java8")
     lazy val pureConfig          = "com.github.pureconfig" %% "pureconfig"                 % Versions.pureConfig
 
+    lazy val redis4cats          = "dev.profunktor"        %% "redis4cats-effects"         % Versions.redis4Cats
+
     lazy val sealerate           = "ca.mrvisser"           %% "sealerate"                  % "0.0.5"
 
     // Compiler plugins
@@ -47,6 +50,7 @@ object Dependencies {
     // Test
     lazy val scalaTest           = "org.scalatest"         %% "scalatest"                  % Versions.scalaTest
     lazy val scalaCheck          = "org.scalacheck"        %% "scalacheck"                 % Versions.scalaCheck
+    lazy val scalaCheckPlus      = "org.scalatestplus"     %% "scalacheck-1-14"            % "3.1.1.1"
     lazy val catsScalaCheck      = "io.chrisdavenport"     %% "cats-scalacheck"            % Versions.catsScalaCheck
   }
 
