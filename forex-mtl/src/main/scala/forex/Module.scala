@@ -1,17 +1,23 @@
 package forex
 
-import cats.effect.{ Concurrent, Timer }
+import cats.effect.{ Concurrent, ConcurrentEffect, Resource, Timer }
 import forex.config.ApplicationConfig
 import forex.http.rates.RatesHttpRoutes
 import forex.services._
 import forex.programs._
 import org.http4s._
+import org.http4s.client.Client
+import org.http4s.client.blaze.BlazeClientBuilder
 import org.http4s.implicits._
 import org.http4s.server.middleware.{ AutoSlash, Timeout }
 
-class Module[F[_]: Concurrent: Timer](config: ApplicationConfig) {
+class Module[F[_]: Concurrent: Timer: ConcurrentEffect](config: ApplicationConfig) {
 
-  private val ratesService: RatesService[F] = RatesServices.dummy[F]
+  //TODO: is it OK using `global` EC here
+  val client: Resource[F, Client[F]] =
+    BlazeClientBuilder[F](scala.concurrent.ExecutionContext.global).resource
+
+  private val ratesService: RatesService[F] = RatesServices.oneFrameDirect[F](client, config.oneFrame)
 
   private val ratesProgram: RatesProgram[F] = RatesProgram[F](ratesService)
 

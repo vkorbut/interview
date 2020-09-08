@@ -27,6 +27,7 @@ object Dependencies {
 
     lazy val http4sDsl           = http4s("http4s-dsl")
     lazy val http4sServer        = http4s("http4s-blaze-server")
+    lazy val http4sClient        = http4s("http4s-blaze-client")
     lazy val http4sCirce         = http4s("http4s-circe")
     lazy val circeCore           = circe("circe-core")
     lazy val circeGeneric        = circe("circe-generic")
@@ -34,6 +35,8 @@ object Dependencies {
     lazy val circeParser         = circe("circe-parser")
     lazy val circeJava8          = circe("circe-java8")
     lazy val pureConfig          = "com.github.pureconfig" %% "pureconfig"                 % Versions.pureConfig
+
+    lazy val sealerate           = "ca.mrvisser"           %% "sealerate"                  % "0.0.5"
 
     // Compiler plugins
     lazy val kindProjector       = "org.spire-math"        %% "kind-projector"             % Versions.kindProjector
