@@ -27,7 +27,7 @@ object Currency {
     case USD => "USD"
   }
 
-  def fromString(s: String): Currency = s.toUpperCase match {
+  def fromString(s: String): Option[Currency] = Seq(s.toUpperCase) collectFirst {
     case "AUD" => AUD
     case "CAD" => CAD
     case "CHF" => CHF
