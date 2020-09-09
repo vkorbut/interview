@@ -45,7 +45,7 @@ Due to limited amount of time the following issues are still present in code:
   In order to fix this cache refresh operation should be protected by semaphore.
   
 ```
-    Bracket[F].bracket(cacheLock.acquire)(tryQueryAndRefresh(pairs))(cacheLock.release)
+    Sync[F].bracket(cacheLock.acquire)(tryQueryAndRefresh(pairs))(cacheLock.release)
 
 ```  
    

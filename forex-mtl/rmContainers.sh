@@ -1,7 +1,7 @@
 #!/bin/bash
 
 docker stop forex-cache
-docker stop stoic_nobel
-docker rm stoic_nobel
+docker stop one-frame
+docker rm one-frame
 docker rm forex-cache
 
